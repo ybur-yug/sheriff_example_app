@@ -3,6 +3,7 @@ defmodule Sebastian.Admin.PageController do
 
   def index(conn, _params) do
     current_user = Guardian.Plug.current_resource(conn)
+    require IEx; IEx.pry
     render(conn, "index.html")
   end
 end

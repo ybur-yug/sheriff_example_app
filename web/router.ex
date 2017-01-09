@@ -14,14 +14,17 @@ defmodule Sebastian.Router do
     plug Guardian.Plug.LoadResource
   end
 
-  pipeline :auth do
-    plug Guardian.Plug.EnsureAuthenticated, handler: Unicorn.AuthHandler
-    plug Sheriff.Plug.LoadResource, resource_loader: Unicorn.UserLoader
-    plug Sheriff.Plug.EnforcePolicy, policy: Unicorn.UserPolicy
+  pipeline :authentication do
+    plug Guardian.Plug.EnsureAuthenticated, handler: Sebastian.AuthHandler
+  end
+
+  pipeline :authorization do
+    plug Sheriff.Plug.EnforcePolicy, policy: Sebastian.UserPolicy
+    plug Sheriff.Plug.LoadResource, resource_loader: Sebastian.UserLoader
   end
 
   scope "/admin", Sebastian.Admin do
-    pipe_through [:browser, :browser_session, :auth]
+    pipe_through [:browser, :browser_session, :authentication, :authorization]
 
     get "/pages", PageController, :index
   end
