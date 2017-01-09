@@ -1,0 +1,6 @@
+You made it and are authorized
+
+User Info:
+
+
+<%= IO.inspect @conn.private[:current_user] %>
